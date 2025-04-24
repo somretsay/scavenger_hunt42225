@@ -62,7 +62,10 @@
                                         {% for question in questions %}
                                                     <div class="question-card" id="question-{{ forloop.counter0 }}" data-question-id="{{ question.id }}" style="display: {% if forloop.first %}block{% else %}none{% endif %};">
                                                 <h3 class="question-title">Question {{ forloop.counter }}</h3>
-                                                        <div class="question-text">{{ question.text }}</div>
+                                                        <div class="question-text">
+                                                            {{ question.text }}
+                                                            <button type="button" class="btn btn-success" onclick="speak('{{ question.text|escapejs }}')">🔊</button>
+                                                        </div>
                                                         
                                                         <form id="answer-form-{{ forloop.counter0 }}" class="answer-form mt-4">
                                                             <div class="form-group">
@@ -1704,5 +1707,9 @@ function initializePeriodicUpdates() {
         }
     }
 }
+function speak(text) {
+    const msg = new SpeechSynthesisUtterance(text);
+    window.speechSynthesis.speak(msg);
+    }
 </script>
 {% endblock %} 
