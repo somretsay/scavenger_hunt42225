@@ -167,11 +167,9 @@ def start_race(request, lobby_id):
 @login_required
 def start_all_races(request):
     try:
-        # Get all active lobbies
         lobbies = Lobby.objects.select_related('race').all()
         
         for lobby in lobbies:
-            # Mark the lobby as started
             lobby.hunt_started = True
             lobby.start_time = timezone.now()
             lobby.save()
@@ -180,14 +178,11 @@ def start_all_races(request):
             if not race:
                 continue
 
-            # Activate the race
             race.is_active = True
             race.save()
 
-            # Build the redirect URL
             redirect_url = reverse('race_questions', kwargs={'race_id': race.id})
 
-            # Send WebSocket notification to participants
             channel_layer = get_channel_layer()
             async_to_sync(channel_layer.group_send)(
                 f'lobby_{lobby.id}',
@@ -204,12 +199,12 @@ def start_all_races(request):
                 }
             )
 
-        messages.success(request, "✅ All races have been started.")
+        messages.success(request, "All races have been started.")
         return redirect('manage_lobbies')
     
     except Exception as e:
         logger.error(f"Error starting all races: {e}")
-        messages.error(request, "❌ Error starting all races.")
+        messages.error(request, "Error starting all races.")
         return redirect('manage_lobbies')
 
 @require_POST
