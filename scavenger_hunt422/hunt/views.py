@@ -170,7 +170,9 @@ def start_all_races(request):
     Triggered by the 'Start All Races' button.
     """
     Lobby.objects.update(is_active=True)
-    return JsonResponse({'success': True, 'message': 'All races started'})
+    messages.success(request, "✅ All races started.")
+    return redirect('manage_lobbies')
+
 
 @require_POST
 def notify_race_started(request, lobby_id):
