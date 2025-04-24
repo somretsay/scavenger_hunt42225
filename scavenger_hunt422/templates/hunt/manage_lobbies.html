@@ -56,13 +56,6 @@
         </div>
     </div>
 
-    <form action="{% url 'start_race' lobby.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="start-race-btn">
-          <i class="fas fa-play"></i> Start All Races
-        </button>
-      </form>
-
     <div class="create-section">
         <button class="create-lobby-btn" onclick="showCreateForm()">
             <i class="fas fa-plus"></i> Create New Lobby
