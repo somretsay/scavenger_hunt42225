@@ -169,7 +169,14 @@ def start_all_races(request):
     Set is_active=True for all lobbies (starts all races).
     Triggered by the 'Start All Races' button.
     """
-    Lobby.objects.update(is_active=True)
+    lobbies = Lobby.objects.all()
+    for lobby in lobbies:
+        lobby.is_active = True
+        lobby.save()
+
+        # Start all races tied to this lobby
+        Race.objects.filter(lobby=lobby).update(is_active=True)
+
     messages.success(request, "✅ All races started.")
     return redirect('manage_lobbies')
 
