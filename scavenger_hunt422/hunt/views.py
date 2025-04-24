@@ -170,6 +170,7 @@ def start_all_races(request):
     Triggered by the 'Start All Races' button.
     """
     lobbies = Lobby.objects.all()
+    Race.objects.update(is_active=True)
     for lobby in lobbies:
         lobby.is_active = True
         lobby.save()
