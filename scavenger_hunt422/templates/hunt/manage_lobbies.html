@@ -8,7 +8,7 @@
     </div>
 
     <div class="mb-4">
-        <form action="{% url 'start_all_lobbies' %}" method="post">
+        <form action="{% url 'start_all_races' %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-success">
                 <i class="fas fa-play"></i> Start All Races
