@@ -38,12 +38,6 @@
                     </p>
                 </div>
                 <div class="lobby-actions">
-                    <form action="{% url 'start_race' lobby.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="start-race-btn">
-                          <i class="fas fa-play"></i> Start All Races
-                        </button>
-                      </form>
                     <a href="{% url 'lobby_details' lobby.id %}" class="btn view-btn">
                         <i class="fas fa-eye"></i> View Details
                     </a>
@@ -53,8 +47,12 @@
         </div>
     </div>
 
-    <button class="btn btn-success mb-3" onclick="startAllRaces()">Start All Races</button>
-
+    <form action="{% url 'start_race' lobby.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="start-race-btn">
+          <i class="fas fa-play"></i> Start All Races
+        </button>
+      </form>
 
     <div class="create-section">
         <button class="create-lobby-btn" onclick="showCreateForm()">
