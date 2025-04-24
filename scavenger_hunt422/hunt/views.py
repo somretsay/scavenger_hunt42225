@@ -163,6 +163,16 @@ def start_race(request, lobby_id):
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
 @require_POST
+@login_required
+def start_all_races(request):
+    """
+    Set is_active=True for all lobbies (starts all races).
+    Triggered by the 'Start All Races' button.
+    """
+    Lobby.objects.update(is_active=True)
+    return JsonResponse({'success': True, 'message': 'All races started'})
+
+@require_POST
 def notify_race_started(request, lobby_id):
     """
     Extra endpoint to manually trigger race started notifications

@@ -50,6 +50,9 @@
         </div>
     </div>
 
+    <button class="btn btn-success mb-3" onclick="startAllRaces()">Start All Races</button>
+
+
     <div class="create-section">
         <button class="create-lobby-btn" onclick="showCreateForm()">
             <i class="fas fa-plus"></i> Create New Lobby
@@ -598,5 +601,37 @@ window.onclick = function(event) {
         event.target.style.display = 'none';
     }
 };
+
+
+function startAllRaces() {
+  fetch("{% url 'start_all_races' %}", {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("✅ " + data.message);
+      document.querySelectorAll('.race-status').forEach(el => {
+        el.textContent = "Active";
+        el.classList.add('text-success');
+        el.classList.remove('text-danger');
+      });
+    } else {
+      alert("❌ Failed to start races.");
+    }
+  });
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+
 </script>
 {% endblock %} 
