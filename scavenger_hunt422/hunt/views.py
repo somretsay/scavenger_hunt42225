@@ -162,25 +162,55 @@ def start_race(request, lobby_id):
     
     return JsonResponse({'success': False, 'error': 'Invalid request method'})
 
+
 @require_POST
 @login_required
 def start_all_races(request):
-    """
-    Set is_active=True for all lobbies (starts all races).
-    Triggered by the 'Start All Races' button.
-    """
-    lobbies = Lobby.objects.all()
-    Race.objects.update(is_active=True)
-    for lobby in lobbies:
-        lobby.is_active = True
-        lobby.save()
+    try:
+        # Get all active lobbies
+        lobbies = Lobby.objects.select_related('race').all()
+        
+        for lobby in lobbies:
+            # Mark the lobby as started
+            lobby.hunt_started = True
+            lobby.start_time = timezone.now()
+            lobby.save()
 
-        # Start all races tied to this lobby
-        Race.objects.filter(lobby=lobby).update(is_active=True)
+            race = lobby.race
+            if not race:
+                continue
 
-    messages.success(request, "✅ All races started.")
-    return redirect('manage_lobbies')
+            # Activate the race
+            race.is_active = True
+            race.save()
 
+            # Build the redirect URL
+            redirect_url = reverse('race_questions', kwargs={'race_id': race.id})
+
+            # Send WebSocket notification to participants
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                f'lobby_{lobby.id}',
+                {
+                    'type': 'race_started',
+                    'redirect_url': redirect_url
+                }
+            )
+            async_to_sync(channel_layer.group_send)(
+                f'race_{race.id}',
+                {
+                    'type': 'race_started',
+                    'redirect_url': redirect_url
+                }
+            )
+
+        messages.success(request, "✅ All races have been started.")
+        return redirect('manage_lobbies')
+    
+    except Exception as e:
+        logger.error(f"Error starting all races: {e}")
+        messages.error(request, "❌ Error starting all races.")
+        return redirect('manage_lobbies')
 
 @require_POST
 def notify_race_started(request, lobby_id):

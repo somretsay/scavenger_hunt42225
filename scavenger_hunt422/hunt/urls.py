@@ -48,7 +48,7 @@ urlpatterns = [
     path('race/<int:race_id>/delete-zone/', views.delete_zone, name='delete_zone'),
     path('race/<int:race_id>/edit-question/', views.edit_question, name='edit_question'),
     path('race/<int:race_id>/delete-question/', views.delete_question, name='delete_question'),
-    path('lobbies/start-all/', views.start_all_races, name='start_all_races'),
+    path('lobby/start-all-races/', views.start_all_races, name='start_all_races'),
 
     
     # Race gameplay URLs

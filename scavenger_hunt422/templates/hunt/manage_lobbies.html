@@ -7,15 +7,15 @@
         <h1>Game Lobby Management</h1>
     </div>
 
-    <div class="mb-4">
+    <div class="mb-4 text-center">
         <form action="{% url 'start_all_races' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-play"></i> Start All Races
+            <button type="submit" class="btn btn-success btn-lg">
+                Start All Races
             </button>
         </form>
     </div>
-
+    
     {% if filtered_messages %}
     <div class="messages-container">
         {% for message in filtered_messages %}
