@@ -7,6 +7,15 @@
         <h1>Game Lobby Management</h1>
     </div>
 
+    <div class="mb-4">
+        <form action="{% url 'start_all_lobbies' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-play"></i> Start All Races
+            </button>
+        </form>
+    </div>
+
     {% if filtered_messages %}
     <div class="messages-container">
         {% for message in filtered_messages %}
@@ -45,15 +54,15 @@
             </div>
             {% endfor %}
         </div>
-        <form action="{% url 'start_race' lobby.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="start-race-btn">
-              <i class="fas fa-play"></i> Start All Races
-            </button>
-          </form>
     </div>
 
-   
+    <form action="{% url 'start_race' lobby.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="start-race-btn">
+          <i class="fas fa-play"></i> Start All Races
+        </button>
+      </form>
+
     <div class="create-section">
         <button class="create-lobby-btn" onclick="showCreateForm()">
             <i class="fas fa-plus"></i> Create New Lobby
