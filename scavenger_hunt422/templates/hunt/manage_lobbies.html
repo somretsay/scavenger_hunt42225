@@ -38,7 +38,12 @@
                     </p>
                 </div>
                 <div class="lobby-actions">
-                    <button class="start-race-btn" onclick="startRace({{ lobby.id }})">
+                    <form action="{% url 'start_race' lobby.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="start-race-btn">
+                          <i class="fas fa-play"></i> Start All Races
+                        </button>
+                      </form>
                         <i class="fas fa-play"></i> Start Race
                     </button>
                     <a href="{% url 'lobby_details' lobby.id %}" class="btn view-btn">
